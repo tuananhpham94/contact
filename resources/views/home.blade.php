@@ -15,6 +15,11 @@
                     @endif
 
                     You are logged in!
+
+                    <h1>{{$user->name}}</h1>
+                    <h1>{{$user->address}}</h1>
+                    <h1>{{$user->dob}}</h1>
+                    <h1>{{$user->tel}}</h1>
                 </div>
             </div>
         </div>
