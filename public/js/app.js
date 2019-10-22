@@ -69089,6 +69089,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -69097,9 +69105,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -69113,28 +69121,225 @@ var App =
 function (_Component) {
   _inherits(App, _Component);
 
-  function App() {
+  function App(props) {
+    var _this;
+
     _classCallCheck(this, App);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(App).apply(this, arguments));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
+    _this.state = {
+      history: [],
+      email: "",
+      address: "",
+      tel: "",
+      helpText: ""
+    };
+    _this.renderHistory = _this.renderHistory.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(App, [{
+    key: "handleEmailChange",
+    value: function handleEmailChange(e) {
+      this.setState({
+        email: e.target.value,
+        helpText: ""
+      });
+      console.log('onChange', this.state);
+    }
+  }, {
+    key: "handleAddressChange",
+    value: function handleAddressChange(e) {
+      this.setState({
+        address: e.target.value,
+        helpText: ""
+      });
+      console.log('onChange', this.state);
+    }
+  }, {
+    key: "handleTelChange",
+    value: function handleTelChange(e) {
+      this.setState({
+        tel: e.target.value,
+        helpText: ""
+      });
+      console.log('onChange', this.state);
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(e) {
+      e.preventDefault();
+      console.log(this.state.history.length);
+
+      if (this.state.history.length > 0) {
+        if (this.state.email !== this.state.history[this.state.history.length - 1].email || this.state.tel !== this.state.history[this.state.history.length - 1].tel || this.state.address !== this.state.history[this.state.history.length - 1].address) {
+          this.createNewHistory();
+        } else {
+          // duplicate handle
+          this.setState({
+            helpText: "Only update if you change at least one of those thing: address, phone or email"
+          });
+        }
+      } else {
+        this.createNewHistory();
+      }
+    }
+  }, {
+    key: "createNewHistory",
+    value: function createNewHistory() {
+      var _this2 = this;
+
+      axios.post('/userHistory', {
+        address: this.state.address,
+        tel: this.state.tel,
+        email: this.state.email
+      }).then(function (response) {
+        var newData = response.data.history;
+
+        var history = _toConsumableArray(_this2.state.history);
+
+        if (history === "") {
+          _this2.setState({
+            history: [newData],
+            helpText: "Good job on creating new records, do you want to update banks or ird?"
+          });
+        } else {
+          _this2.setState({
+            history: [].concat(_toConsumableArray(history), [newData]),
+            helpText: "Good job on creating new records, do you want to update banks or ird?"
+          });
+        }
+
+        console.log('form handle submit', response);
+        console.log(_this2.state);
+      });
+    }
+  }, {
+    key: "getHistory",
+    value: function getHistory() {
+      var _this3 = this;
+
+      axios.get('/userHistory').then(function (response) {
+        var allHistory = _toConsumableArray(response.data.allHistory);
+
+        var email = "";
+        var address = "";
+        var tel = "";
+
+        if (!allHistory[allHistory.length - 1]) {
+          email = "";
+          address = "";
+          tel = "";
+        } else {
+          !allHistory[allHistory.length - 1].email ? email = "" : email = allHistory[allHistory.length - 1].email;
+          !allHistory[allHistory.length - 1].address ? address = "" : address = allHistory[allHistory.length - 1].address;
+          !allHistory[allHistory.length - 1].tel ? tel = "" : tel = allHistory[allHistory.length - 1].tel;
+        }
+
+        _this3.setState({
+          //spread operator to clone all response history from database
+          history: allHistory,
+          email: email,
+          address: address,
+          tel: tel
+        });
+
+        console.log("1" + _this3.state.email);
+        console.log(_this3.state);
+      });
+    }
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.getHistory();
+    }
+  }, {
+    key: "renderHistory",
+    value: function renderHistory() {
+      return this.state.history.map(function (history) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+          key: history.id
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.created_at), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.email), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.tel), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.address));
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
+      var _this4 = this;
+
+      var table;
+
+      if (this.state.history.length > 0) {
+        table = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
+          className: "Contact"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Changed Date"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Email"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Telephone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Address")), this.renderHistory()));
+      } else {
+        table = this.renderHistory();
+      }
+
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "container"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row justify-content-center"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "col-md-8"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-header"
       }, "App Component"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
-      }, "I'm an example component!")))));
+      }, this.state.helpText), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        className: "detail",
+        onSubmit: function onSubmit(event) {
+          return _this4.handleSubmit(event);
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group row"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "email"
+      }, "Email address"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        onChange: function onChange(event) {
+          return _this4.handleEmailChange(event);
+        },
+        id: "email",
+        type: "email",
+        className: "form-control",
+        name: "email",
+        value: this.state.email,
+        autoFocus: true
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group row"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "tel"
+      }, " Phone number"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        id: "tel",
+        type: "text",
+        onChange: function onChange(event) {
+          return _this4.handleTelChange(event);
+        },
+        className: "form-control",
+        name: "tel",
+        value: this.state.tel,
+        autoFocus: true
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "form-group row"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        htmlFor: "address"
+      }, "Address"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        id: "address",
+        type: "text",
+        onChange: function onChange(event) {
+          return _this4.handleAddressChange(event);
+        },
+        className: "form-control",
+        name: "address",
+        value: this.state.address,
+        autoFocus: true
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        type: "submit",
+        className: "btn btn-primary"
+      }, "Change")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "row"
+      }, table))));
     }
   }]);
 

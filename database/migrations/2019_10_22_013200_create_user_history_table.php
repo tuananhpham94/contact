@@ -17,10 +17,10 @@ class CreateUserHistoryTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('email');
-            $table->date('dob');
-            $table->string('address');
-            $table->string('tel');
+            $table->string('email')->nullable();
+            $table->date('dob')->nullable();
+            $table->string('address')->nullable();
+            $table->string('tel')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

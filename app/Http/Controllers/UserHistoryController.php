@@ -2,18 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\UserHistory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserHistoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('verified');
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, UserHistory $history)
     {
-        //
+        $allHistory = $history->where('user_id', Auth::user()->id)->get();
+        return response()->json([
+            'allHistory' => $allHistory
+        ]);
     }
 
     /**
@@ -34,7 +44,16 @@ class UserHistoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $history = $request->user()->userHistory()->create([
+            'user_id' => $request->user()->id,
+            'address' => $request->address,
+            'email' => $request->email,
+            'tel' => $request->tel,
+
+        ]);
+        return response()->json([
+            'history' => $history
+        ]);
     }
 
     /**

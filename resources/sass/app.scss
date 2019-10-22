@@ -6,3 +6,25 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+.Contact {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.Contact td, .Contact th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.Contact tr:nth-child(even){background-color: #f2f2f2;}
+
+.Contact tr:hover {background-color: #ddd;}
+
+.Contact th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+}
+.card {width:100%}.row{margin-left:0px;margin-right: 0px}form.detail{width: 50%; margin:0 auto;}

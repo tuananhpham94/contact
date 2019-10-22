@@ -9,6 +9,7 @@ class UserHistory extends Model
 {
     use Notifiable;
 
+    protected $table = 'user_history';
     /**
      * The attributes that are mass assignable.
      *
