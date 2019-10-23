@@ -117,7 +117,7 @@ export default class App extends Component {
                         />
                         <hr />
 
-                        <div className="row">
+                        <div className="row table-component">
                             {table}
                         </div>
                     </div>

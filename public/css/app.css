@@ -11141,3 +11141,7 @@ form.detail {
   margin: 0 auto;
 }
 
+.card #root .container .justify-content-center .card .row.table-component {
+  padding: 40px;
+}
+

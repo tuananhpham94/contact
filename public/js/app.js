@@ -69283,7 +69283,7 @@ function (_Component) {
         },
         address: this.state.address
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: "row"
+        className: "row table-component"
       }, table))));
     }
   }]);
