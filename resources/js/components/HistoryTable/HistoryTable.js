@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 export default class History extends Component {
+    constructor(props) {
+        super(props);
+    }
     renderHistory(history) {
         return history.map(history => (
             <tr key={history.id}>

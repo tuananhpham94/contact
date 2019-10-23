@@ -13,7 +13,6 @@ export default class App extends Component {
             tel: "",
             helpText: ""
         };
-        // this.renderHistory = this.renderHistory.bind(this);
     }
     handleEmailChange(e) {
         this.setState({email:e.target.value,

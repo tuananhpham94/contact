@@ -69137,8 +69137,7 @@ function (_Component) {
       address: "",
       tel: "",
       helpText: ""
-    }; // this.renderHistory = this.renderHistory.bind(this);
-
+    };
     return _this;
   }
 
@@ -69403,10 +69402,10 @@ var History =
 function (_Component) {
   _inherits(History, _Component);
 
-  function History() {
+  function History(props) {
     _classCallCheck(this, History);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(History).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(History).call(this, props));
   }
 
   _createClass(History, [{
