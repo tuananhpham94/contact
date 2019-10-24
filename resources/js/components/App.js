@@ -32,7 +32,6 @@ export default class App extends Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state.tel);
         if(this.state.history.length > 0){
             if(this.state.email !== this.state.history[this.state.history.length-1].email ||
                 this.state.tel !== this.state.history[this.state.history.length-1].tel ||
@@ -79,13 +78,15 @@ export default class App extends Component {
     getHistory() {
         axios.get('/userHistory').then((response) => {
             const allHistory = [...response.data.allHistory];
+            const user = {...response.data.user};
+            // console.log({...response.data.user});
             let email = "";
             let address = "";
             let tel = "";
             if(!allHistory[allHistory.length-1]) {
-                !response.data.user.email ? email = "": email = response.data.user.email;
-                !response.data.user.address ? address = "" : address = response.data.user.address;
-                !response.data.user.tel ? tel = "" : tel = response.data.user.tel;
+                !user.email ? email = "": email = user.email;
+                !user.address ? address = "" : address = user.address;
+                !user.tel ? tel = "" : tel = user.tel;
             } else {
                 !allHistory[allHistory.length-1].email ? email = "" : email = allHistory[allHistory.length-1].email;
                 !allHistory[allHistory.length-1].address ? address = "" : address = allHistory[allHistory.length-1].address;

@@ -69091,6 +69091,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Form_Form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Form/Form */ "./resources/js/components/Form/Form.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -69169,7 +69175,6 @@ function (_Component) {
     key: "handleSubmit",
     value: function handleSubmit(e) {
       e.preventDefault();
-      console.log(this.state.tel);
 
       if (this.state.history.length > 0) {
         if (this.state.email !== this.state.history[this.state.history.length - 1].email || this.state.tel !== this.state.history[this.state.history.length - 1].tel || this.state.address !== this.state.history[this.state.history.length - 1].address) {
@@ -69226,14 +69231,17 @@ function (_Component) {
       axios.get('/userHistory').then(function (response) {
         var allHistory = _toConsumableArray(response.data.allHistory);
 
+        var user = _objectSpread({}, response.data.user); // console.log({...response.data.user});
+
+
         var email = "";
         var address = "";
         var tel = "";
 
         if (!allHistory[allHistory.length - 1]) {
-          !response.data.user.email ? email = "" : email = response.data.user.email;
-          !response.data.user.address ? address = "" : address = response.data.user.address;
-          !response.data.user.tel ? tel = "" : tel = response.data.user.tel;
+          !user.email ? email = "" : email = user.email;
+          !user.address ? address = "" : address = user.address;
+          !user.tel ? tel = "" : tel = user.tel;
         } else {
           !allHistory[allHistory.length - 1].email ? email = "" : email = allHistory[allHistory.length - 1].email;
           !allHistory[allHistory.length - 1].address ? address = "" : address = allHistory[allHistory.length - 1].address;

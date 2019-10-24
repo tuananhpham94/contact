@@ -56,12 +56,8 @@ class User extends Authenticatable implements MustVerifyEmail
             }
             $user->email = $request->email;
         }
-        if(!empty($request->tel)) {
-            $user->tel = $request->tel;
-        }
-        if(!empty($request->address)) {
-            $user->address = $request->address;
-        }
+        empty($request->tel) ? : $user->tel = $request->tel;
+        empty($request->address) ? : $user->address = $request->address;
         $user->save();
         return true;
     }
