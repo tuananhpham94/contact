@@ -16,10 +16,8 @@
 
                     You are logged in!
 
-                    <h1>{{$user->name}}</h1>
-                    <h1>{{$user->address}}</h1>
-                    <h1>{{$user->dob}}</h1>
-                    <h1>{{$user->tel}}</h1>
+                    <h2>Hello {{$user->name}}</h2>
+
                 </div>
                 <div id="root"></div>
             </div>

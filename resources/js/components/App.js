@@ -83,9 +83,9 @@ export default class App extends Component {
             let address = "";
             let tel = "";
             if(!allHistory[allHistory.length-1]) {
-                email= response.data.user.email;
-                address = response.data.user.address;
-                tel=response.data.user.tel;
+                !response.data.user.email ? email = "": email = response.data.user.email;
+                !response.data.user.address ? address = "" : address = response.data.user.address;
+                !response.data.user.tel ? tel = "" : tel = response.data.user.tel;
             } else {
                 !allHistory[allHistory.length-1].email ? email = "" : email = allHistory[allHistory.length-1].email;
                 !allHistory[allHistory.length-1].address ? address = "" : address = allHistory[allHistory.length-1].address;
