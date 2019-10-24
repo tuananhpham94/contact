@@ -23,8 +23,10 @@ class UserHistoryController extends Controller
     public function index(Request $request, UserHistory $history)
     {
         $allHistory = $history->where('user_id', Auth::user()->id)->get();
+        $user = Auth::user();
         return response()->json([
-            'allHistory' => $allHistory
+            'allHistory' => $allHistory,
+            'user' => $user
         ]);
     }
 
