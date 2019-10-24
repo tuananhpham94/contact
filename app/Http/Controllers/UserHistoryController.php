@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\UserHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UserHistoryController extends Controller
 {
@@ -44,11 +46,26 @@ class UserHistoryController extends Controller
      */
     public function store(Request $request)
     {
+//        return DB::table('user_history')->latest('created_date')->first();
+//        Take newest record with address email and tel
+//    => compared them with newer record from request below, then fire out some zap to banks
+        $user = User::find($request->user()->id);
+        $result = $user->updateHistory($request);
+        if(!$result){
+            return response()->json([
+                'error' => true,
+                'message' => "Email has to be unique"
+            ]);
+        }
+
+        is_null($request->address) ? $address = "" : $address = $request->address;
+        is_null($request->email) ? $email = "" : $email = $request->email;
+        is_null($request->tel) ? $tel = "" : $tel = $request->tel;
         $history = $request->user()->userHistory()->create([
             'user_id' => $request->user()->id,
-            'address' => $request->address,
-            'email' => $request->email,
-            'tel' => $request->tel,
+            'address' => $address,
+            'email' => $email,
+            'tel' => $tel,
 
         ]);
         return response()->json([

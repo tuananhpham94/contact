@@ -22,4 +22,5 @@ class UserHistory extends Model
     {
         return $this->belongsTo('App\User');
     }
+
 }

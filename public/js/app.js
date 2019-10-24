@@ -69169,7 +69169,7 @@ function (_Component) {
     key: "handleSubmit",
     value: function handleSubmit(e) {
       e.preventDefault();
-      console.log(this.state.history.length);
+      console.log(this.state.tel);
 
       if (this.state.history.length > 0) {
         if (this.state.email !== this.state.history[this.state.history.length - 1].email || this.state.tel !== this.state.history[this.state.history.length - 1].tel || this.state.address !== this.state.history[this.state.history.length - 1].address) {
@@ -69192,22 +69192,29 @@ function (_Component) {
       axios.post('/userHistory', {
         address: this.state.address,
         tel: this.state.tel,
-        email: this.state.email
+        email: this.state.email //bug on this: email needs to be unique on users table
+
       }).then(function (response) {
-        var newData = response.data.history;
-
-        var history = _toConsumableArray(_this2.state.history);
-
-        if (history === "") {
+        if (response.data.error) {
           _this2.setState({
-            history: [newData],
-            helpText: "Good job on creating new records, do you want to update banks or ird?"
+            helpText: response.data.message
           });
         } else {
-          _this2.setState({
-            history: [].concat(_toConsumableArray(history), [newData]),
-            helpText: "Good job on creating new records, do you want to update banks or ird?"
-          });
+          var newData = response.data.history;
+
+          var history = _toConsumableArray(_this2.state.history);
+
+          if (history === "") {
+            _this2.setState({
+              history: [newData],
+              helpText: "Good job on creating new records, do you want to update banks or ird?"
+            });
+          } else {
+            _this2.setState({
+              history: [].concat(_toConsumableArray(history), [newData]),
+              helpText: "Good job on creating new records, do you want to update banks or ird?"
+            });
+          }
         }
       });
     }

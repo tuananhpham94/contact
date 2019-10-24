@@ -32,7 +32,7 @@ export default class App extends Component {
     }
     handleSubmit(e) {
         e.preventDefault();
-        console.log(this.state.history.length);
+        console.log(this.state.tel);
         if(this.state.history.length > 0){
             if(this.state.email !== this.state.history[this.state.history.length-1].email ||
                 this.state.tel !== this.state.history[this.state.history.length-1].tel ||
@@ -53,19 +53,26 @@ export default class App extends Component {
             address: this.state.address,
             tel: this.state.tel,
             email: this.state.email
+                //bug on this: email needs to be unique on users table
         }).then(response => {
-            let newData = response.data.history;
-            let history = [...this.state.history];
-            if (history === "") {
+            if(response.data.error) {
                 this.setState({
-                    history: [newData],
-                    helpText: "Good job on creating new records, do you want to update banks or ird?"
+                    helpText: response.data.message
                 })
             } else {
-                this.setState({
-                    history: [...history, newData],
-                    helpText: "Good job on creating new records, do you want to update banks or ird?"
-                })
+                let newData = response.data.history;
+                let history = [...this.state.history];
+                if (history === "") {
+                    this.setState({
+                        history: [newData],
+                        helpText: "Good job on creating new records, do you want to update banks or ird?"
+                    })
+                } else {
+                    this.setState({
+                        history: [...history, newData],
+                        helpText: "Good job on creating new records, do you want to update banks or ird?"
+                    })
+                }
             }
         });
     }
