@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notification;
 use App\User;
 use App\UserHistory;
 use Illuminate\Http\Request;
@@ -23,6 +24,14 @@ class UserHistoryController extends Controller
     public function index(Request $request, UserHistory $history)
     {
         $allHistory = $history->where('user_id', Auth::user()->id)->get();
+        foreach($allHistory as $history) {
+            $notifications = Notification::where('history_id', $history->id)->get();
+            foreach($notifications as $notification) {
+                $notification['label'] = $notification->company->legal_name;
+                $notification['value'] = $notification->company->id;
+            }
+            $history['selectedCompanies'] = $notifications;
+        }
         $user = Auth::user();
         return response()->json([
             'allHistory' => $allHistory,
@@ -70,8 +79,18 @@ class UserHistoryController extends Controller
             'tel' => $tel,
 
         ]);
+        $history['selectedCompanies'] = $request->selectedCompanies;
+
+        $notifications = [];
+        foreach($request->selectedCompanies as $company) {
+            $notifications = Notification::create([
+                'history_id' => $history->id,
+                'company_id' => $company['value']
+            ]);
+        }
         return response()->json([
-            'history' => $history
+            'history' => $history,
+            'companies' => $request->selectedCompanies
         ]);
     }
 

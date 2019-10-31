@@ -3,10 +3,15 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
-
+function parseCompanies(companies){
+    return companies.map(company => {
+        return { label: company.legal_name, value: company.id };
+    });
+}
 const form = props => {
     return (
         <form className="detail" onSubmit={props.submit}>
+            <h2>Recently change your contact detail? Let them know!</h2>
             <div className="form-group row">
                 <label htmlFor="email">Email address</label>
                 <input
@@ -43,31 +48,9 @@ const form = props => {
                     isMulti isSearchable
                     components={animatedComponents}
                     className="Select"
-                    options={[
-                        { value: 'ANZ New Zealand', label: 'ANZ New Zealand' },
-                        { value: 'ASB Bank', label: 'ASB Bank' },
-                        { value: 'Bank of Baroda', label: 'Bank of Baroda' },
-                        { value: 'Bank of China', label: 'Bank of China' },
-                        { value: 'Bank of India', label: 'Bank of India' },
-                        { value: 'Bank of Tokyo-Mitsubishi UFJ', label: 'Bank of Tokyo-Mitsubishi UFJ' },
-                        { value: 'BankDirect New Zealand', label: 'BankDirect New Zealand' },
-                        { value: 'BNZ', label: 'BNZ' },
-                        { value: 'Citibank', label: 'Citibank' },
-                        { value: 'Cooperative Bank', label: 'Cooperative Bank' },
-                        { value: 'HBS Bank', label: 'HBS Bank' },
-                        { value: 'Heartland Savings Bank', label: 'Heartland Savings Bank' },
-                        { value: 'HSBC New Zealand', label: 'HSBC New Zealand' },
-                        { value: 'Industrial and Commercial bank of China', label: 'Industrial and Commercial bank of China' },
-                        { value: 'Kiwibank', label: 'Kiwibank' },
-                        { value: 'Kookmin Bank', label: 'Kookmin Bank' },
-                        { value: 'Rabobank', label: 'Rabobank' },
-                        { value: 'RaboDirect', label: 'RaboDirect' },
-                        { value: 'SBS Bank', label: 'SBS Bank' },
-                        { value: 'TSB Bank', label: 'TSB Bank' },
-                        { value: 'Westpac', label: 'Westpac' },
-                        { value: 'IRD', label: 'IRD' },
-
-                    ]}
+                    options={parseCompanies(props.companies)}
+                    onChange={props.companyChange}
+                    value={props.selectedCompanies}
                 />
             </div>
 

@@ -21,3 +21,5 @@ Route::get('/home', 'HomeController@index')->name('home')->middleware('verified'
 
 Route::resource('user', 'UserController')->middleware('auth');
 Route::resource('userHistory', 'UserHistoryController')->middleware('auth');
+Route::resource('company', 'CompanyController')->middleware('auth');
+Route::resource('notification', 'NotificationController')->middleware('auth');

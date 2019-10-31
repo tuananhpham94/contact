@@ -12,6 +12,9 @@ export default class History extends Component {
                 <td>{history.email}</td>
                 <td>{history.tel}</td>
                 <td>{history.address}</td>
+                <td>{history.selectedCompanies ? history.selectedCompanies.map((company, key) => {
+                    return company.label + ' '
+                }) : "None"}  </td>
             </tr>
         ));
     };
@@ -25,6 +28,7 @@ export default class History extends Component {
                     <th>Email</th>
                     <th>Telephone</th>
                     <th>Address</th>
+                    <th>Company you sent these to</th>
                 </tr>
                 {this.renderHistory(this.props.history)}
                 </tbody>

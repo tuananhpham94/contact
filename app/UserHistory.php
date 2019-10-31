@@ -22,5 +22,13 @@ class UserHistory extends Model
     {
         return $this->belongsTo('App\User');
     }
+    public static function getLatestHistory($request) {
+        return self::where('user_id', $request->user()->id)->get()->last();
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany('App\Notification');
+    }
 
 }

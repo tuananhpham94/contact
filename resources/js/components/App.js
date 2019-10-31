@@ -12,7 +12,9 @@ export default class App extends Component {
             email: "",
             address: "",
             tel: "",
-            helpText: ""
+            helpText: "",
+            companies: [],
+            selectedCompanies: []
         };
     }
     handleEmailChange(e) {
@@ -29,6 +31,11 @@ export default class App extends Component {
         this.setState({
             tel: e.target.value,
             helpText: ""
+        });
+    }
+    handleCompanyChange(name, e) {
+        this.setState({
+            selectedCompanies: e
         });
     }
     handleSubmit(e) {
@@ -48,11 +55,13 @@ export default class App extends Component {
             this.createNewHistory();
         }
     }
+
     createNewHistory () {
         axios.post('/userHistory', {
             address: this.state.address,
             tel: this.state.tel,
-            email: this.state.email
+            email: this.state.email,
+            selectedCompanies: this.state.selectedCompanies
                 //bug on this: email needs to be unique on users table
         }).then(response => {
             if(response.data.error) {
@@ -65,11 +74,13 @@ export default class App extends Component {
                 if (history === "") {
                     this.setState({
                         history: [newData],
+                        selectedCompanies: response.data.companies,
                         helpText: "Good job on creating new records, do you want to update banks or ird?"
                     })
                 } else {
                     this.setState({
                         history: [...history, newData],
+                        selectedCompanies: response.data.companies,
                         helpText: "Good job on creating new records, do you want to update banks or ird?"
                     })
                 }
@@ -103,12 +114,30 @@ export default class App extends Component {
             });
         })
     }
+    getCompany() {
+        axios.get('/company').then(response => {
+            const companies = [...response.data.companies];
+            this.setState({
+                companies: companies
+            })
+        })
+    }
+    getSelectedCompany() {
+        axios.get('/notification').then(response => {
+            const selectedCompanies = [...response.data.selectedCompanies];
+            this.setState({
+                selectedCompanies: selectedCompanies
+            })
+        })
+    }
     componentDidMount() {
         this.getHistory();
+        this.getCompany();
+        this.getSelectedCompany();
     }
     render() {
         let table;
-        this.state.history.length > 0 ? table = <HistoryTable history={this.state.history}/> : table = "";
+        this.state.history.length > 0 ? table = <HistoryTable history={this.state.history} /> : table = "";
         return (
             <div className="container">
                 <div className="row justify-content-center">
@@ -125,6 +154,10 @@ export default class App extends Component {
                             tel={this.state.tel}
                             addressChange={(event) => this.handleAddressChange(event)}
                             address={this.state.address}
+                            companies={this.state.companies}
+                            companyChange={e => this.handleCompanyChange(name, e)}
+                            selectedCompanies={this.state.selectedCompanies}
+                            value={this.state.selectedCompanies}
                         />
                         <hr />
 

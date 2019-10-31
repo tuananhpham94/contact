@@ -79758,7 +79758,9 @@ function (_Component) {
       email: "",
       address: "",
       tel: "",
-      helpText: ""
+      helpText: "",
+      companies: [],
+      selectedCompanies: []
     };
     return _this;
   }
@@ -79788,6 +79790,13 @@ function (_Component) {
       });
     }
   }, {
+    key: "handleCompanyChange",
+    value: function handleCompanyChange(name, e) {
+      this.setState({
+        selectedCompanies: e
+      });
+    }
+  }, {
     key: "handleSubmit",
     value: function handleSubmit(e) {
       e.preventDefault();
@@ -79813,7 +79822,8 @@ function (_Component) {
       axios.post('/userHistory', {
         address: this.state.address,
         tel: this.state.tel,
-        email: this.state.email //bug on this: email needs to be unique on users table
+        email: this.state.email,
+        selectedCompanies: this.state.selectedCompanies //bug on this: email needs to be unique on users table
 
       }).then(function (response) {
         if (response.data.error) {
@@ -79828,11 +79838,13 @@ function (_Component) {
           if (history === "") {
             _this2.setState({
               history: [newData],
+              selectedCompanies: response.data.companies,
               helpText: "Good job on creating new records, do you want to update banks or ird?"
             });
           } else {
             _this2.setState({
               history: [].concat(_toConsumableArray(history), [newData]),
+              selectedCompanies: response.data.companies,
               helpText: "Good job on creating new records, do you want to update banks or ird?"
             });
           }
@@ -79875,14 +79887,42 @@ function (_Component) {
       });
     }
   }, {
+    key: "getCompany",
+    value: function getCompany() {
+      var _this4 = this;
+
+      axios.get('/company').then(function (response) {
+        var companies = _toConsumableArray(response.data.companies);
+
+        _this4.setState({
+          companies: companies
+        });
+      });
+    }
+  }, {
+    key: "getSelectedCompany",
+    value: function getSelectedCompany() {
+      var _this5 = this;
+
+      axios.get('/notification').then(function (response) {
+        var selectedCompanies = _toConsumableArray(response.data.selectedCompanies);
+
+        _this5.setState({
+          selectedCompanies: selectedCompanies
+        });
+      });
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.getHistory();
+      this.getCompany();
+      this.getSelectedCompany();
     }
   }, {
     key: "render",
     value: function render() {
-      var _this4 = this;
+      var _this6 = this;
 
       var table;
       this.state.history.length > 0 ? table = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_HistoryTable_HistoryTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -79902,20 +79942,26 @@ function (_Component) {
         className: "card-body"
       }, this.state.helpText), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Form_Form__WEBPACK_IMPORTED_MODULE_3__["default"], {
         submit: function submit(event) {
-          return _this4.handleSubmit(event);
+          return _this6.handleSubmit(event);
         },
         emailChange: function emailChange(event) {
-          return _this4.handleEmailChange(event);
+          return _this6.handleEmailChange(event);
         },
         email: this.state.email,
         telChange: function telChange(event) {
-          return _this4.handleTelChange(event);
+          return _this6.handleTelChange(event);
         },
         tel: this.state.tel,
         addressChange: function addressChange(event) {
-          return _this4.handleAddressChange(event);
+          return _this6.handleAddressChange(event);
         },
-        address: this.state.address
+        address: this.state.address,
+        companies: this.state.companies,
+        companyChange: function companyChange(e) {
+          return _this6.handleCompanyChange(name, e);
+        },
+        selectedCompanies: this.state.selectedCompanies,
+        value: this.state.selectedCompanies
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "row table-component"
       }, table))));
@@ -79951,11 +79997,20 @@ __webpack_require__.r(__webpack_exports__);
 
 var animatedComponents = Object(react_select_animated__WEBPACK_IMPORTED_MODULE_2__["default"])();
 
+function parseCompanies(companies) {
+  return companies.map(function (company) {
+    return {
+      label: company.legal_name,
+      value: company.id
+    };
+  });
+}
+
 var form = function form(props) {
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
     className: "detail",
     onSubmit: props.submit
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Recently change your contact detail? Let them know!"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group row"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "email"
@@ -80001,73 +80056,9 @@ var form = function form(props) {
     isSearchable: true,
     components: animatedComponents,
     className: "Select",
-    options: [{
-      value: 'ANZ New Zealand',
-      label: 'ANZ New Zealand'
-    }, {
-      value: 'ASB Bank',
-      label: 'ASB Bank'
-    }, {
-      value: 'Bank of Baroda',
-      label: 'Bank of Baroda'
-    }, {
-      value: 'Bank of China',
-      label: 'Bank of China'
-    }, {
-      value: 'Bank of India',
-      label: 'Bank of India'
-    }, {
-      value: 'Bank of Tokyo-Mitsubishi UFJ',
-      label: 'Bank of Tokyo-Mitsubishi UFJ'
-    }, {
-      value: 'BankDirect New Zealand',
-      label: 'BankDirect New Zealand'
-    }, {
-      value: 'BNZ',
-      label: 'BNZ'
-    }, {
-      value: 'Citibank',
-      label: 'Citibank'
-    }, {
-      value: 'Cooperative Bank',
-      label: 'Cooperative Bank'
-    }, {
-      value: 'HBS Bank',
-      label: 'HBS Bank'
-    }, {
-      value: 'Heartland Savings Bank',
-      label: 'Heartland Savings Bank'
-    }, {
-      value: 'HSBC New Zealand',
-      label: 'HSBC New Zealand'
-    }, {
-      value: 'Industrial and Commercial bank of China',
-      label: 'Industrial and Commercial bank of China'
-    }, {
-      value: 'Kiwibank',
-      label: 'Kiwibank'
-    }, {
-      value: 'Kookmin Bank',
-      label: 'Kookmin Bank'
-    }, {
-      value: 'Rabobank',
-      label: 'Rabobank'
-    }, {
-      value: 'RaboDirect',
-      label: 'RaboDirect'
-    }, {
-      value: 'SBS Bank',
-      label: 'SBS Bank'
-    }, {
-      value: 'TSB Bank',
-      label: 'TSB Bank'
-    }, {
-      value: 'Westpac',
-      label: 'Westpac'
-    }, {
-      value: 'IRD',
-      label: 'IRD'
-    }]
+    options: parseCompanies(props.companies),
+    onChange: props.companyChange,
+    value: props.selectedCompanies
   })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     type: "submit",
     className: "btn btn-primary"
@@ -80130,7 +80121,9 @@ function (_Component) {
       return history.map(function (history) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
           key: history.id
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.created_at), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.email), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.tel), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.address));
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.created_at), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.email), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.tel), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.address), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.selectedCompanies ? history.selectedCompanies.map(function (company, key) {
+          return company.label + ' ';
+        }) : "None", "  "));
       });
     }
   }, {
@@ -80138,7 +80131,7 @@ function (_Component) {
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
         className: "Contact"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Changed Date"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Email"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Telephone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Address")), this.renderHistory(this.props.history)));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Changed Date"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Email"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Telephone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Address"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Company you sent these to")), this.renderHistory(this.props.history)));
     }
   }]);
 
