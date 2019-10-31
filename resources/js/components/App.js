@@ -8,6 +8,7 @@ export default class App extends Component {
         super(props);
         this.state = {
             history:[],
+            id: "",
             email: "",
             address: "",
             tel: "",
@@ -98,6 +99,7 @@ export default class App extends Component {
                 email: email,
                 address: address,
                 tel: tel,
+                id: user.unique_id
             });
         })
     }
@@ -112,6 +114,7 @@ export default class App extends Component {
                 <div className="row justify-content-center">
                     <div className="card">
                         <div className="card-header">App Component</div>
+                        <div className="card-header">Unique ID: {this.state.id}</div>
 
                         <div className="card-body">{this.state.helpText}</div>
                         <Form
