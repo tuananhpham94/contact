@@ -79802,7 +79802,7 @@ function (_Component) {
       e.preventDefault();
 
       if (this.state.history.length > 0) {
-        if (this.state.email !== this.state.history[this.state.history.length - 1].email || this.state.tel !== this.state.history[this.state.history.length - 1].tel || this.state.address !== this.state.history[this.state.history.length - 1].address) {
+        if (this.state.email !== this.state.history[this.state.history.length - 1].email || this.state.tel !== this.state.history[this.state.history.length - 1].tel || this.state.address !== this.state.history[this.state.history.length - 1].address || JSON.stringify(this.state.selectedCompanies) !== JSON.stringify(this.state.history[this.state.history.length - 1].selectedCompanies)) {
           this.createNewHistory();
         } else {
           // duplicate handle
@@ -79905,11 +79905,13 @@ function (_Component) {
       var _this5 = this;
 
       axios.get('/notification').then(function (response) {
-        var selectedCompanies = _toConsumableArray(response.data.selectedCompanies);
+        if (!response.data.error) {
+          var selectedCompanies = _toConsumableArray(response.data.selectedCompanies);
 
-        _this5.setState({
-          selectedCompanies: selectedCompanies
-        });
+          _this5.setState({
+            selectedCompanies: selectedCompanies
+          });
+        }
       });
     }
   }, {
@@ -80122,8 +80124,8 @@ function (_Component) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
           key: history.id
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.created_at), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.email), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.tel), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.address), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, history.selectedCompanies ? history.selectedCompanies.map(function (company, key) {
-          return company.label + ' ';
-        }) : "None", "  "));
+          return company.label;
+        }).join(', ') : "None", "  "));
       });
     }
   }, {

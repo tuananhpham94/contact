@@ -22,7 +22,11 @@ class NotificationController extends Controller
     public function index(Request $request, Notification $notification)
     {
         $latestHistory = UserHistory::getLatestHistory($request);
-
+        if(!$latestHistory){
+            return response()->json([
+                'error' => true,
+            ]);
+        }
         $notifications = Notification::where('history_id', $latestHistory->id)->get();
         foreach($notifications as $notification) {
             $notification['label'] = $notification->company->legal_name;

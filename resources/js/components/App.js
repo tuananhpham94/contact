@@ -43,7 +43,8 @@ export default class App extends Component {
         if(this.state.history.length > 0){
             if(this.state.email !== this.state.history[this.state.history.length-1].email ||
                 this.state.tel !== this.state.history[this.state.history.length-1].tel ||
-                this.state.address !== this.state.history[this.state.history.length-1].address){
+                this.state.address !== this.state.history[this.state.history.length-1].address ||
+                JSON.stringify(this.state.selectedCompanies) !== JSON.stringify(this.state.history[this.state.history.length-1].selectedCompanies)) {
                 this.createNewHistory();
             } else {
                 // duplicate handle
@@ -88,7 +89,7 @@ export default class App extends Component {
         });
     }
     getHistory() {
-        axios.get('/userHistory').then((response) => {
+        axios.get('/userHistory').then(response => {
             const allHistory = [...response.data.allHistory];
             const user = {...response.data.user};
             // console.log({...response.data.user});
@@ -124,10 +125,12 @@ export default class App extends Component {
     }
     getSelectedCompany() {
         axios.get('/notification').then(response => {
-            const selectedCompanies = [...response.data.selectedCompanies];
-            this.setState({
-                selectedCompanies: selectedCompanies
-            })
+            if(!response.data.error) {
+                const selectedCompanies = [...response.data.selectedCompanies];
+                this.setState({
+                    selectedCompanies: selectedCompanies
+                })
+            }
         })
     }
     componentDidMount() {

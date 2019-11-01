@@ -59,7 +59,7 @@ class UserHistoryController extends Controller
     {
 //        return DB::table('user_history')->latest('created_date')->first();
 //        Take newest record with address email and tel
-//    => compared them with newer record from request below, then fire out some zap to banks
+//    => compared them with newer record from request below, then fire out some zap to banks // probably events / queues combo to send email to banks at this stage
         $user = User::find($request->user()->id);
         $result = $user->updateHistory($request);
         if(!$result){
@@ -72,6 +72,7 @@ class UserHistoryController extends Controller
         is_null($request->address) ? $address = "" : $address = $request->address;
         is_null($request->email) ? $email = "" : $email = $request->email;
         is_null($request->tel) ? $tel = "" : $tel = $request->tel;
+        // 1 record of User History is created
         $history = $request->user()->userHistory()->create([
             'user_id' => $request->user()->id,
             'address' => $address,
@@ -79,6 +80,7 @@ class UserHistoryController extends Controller
             'tel' => $tel,
 
         ]);
+        // append this with the array of selected companies to fire back to react
         $history['selectedCompanies'] = $request->selectedCompanies;
 
         $notifications = [];
