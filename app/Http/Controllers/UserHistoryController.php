@@ -23,7 +23,7 @@ class UserHistoryController extends Controller
      */
     public function index(Request $request, UserHistory $history)
     {
-        $allHistory = $history->where('user_id', Auth::user()->id)->get();
+        $allHistory = $history->where('user_id', $request->user()->id)->get();
         foreach($allHistory as $history) {
             $notifications = Notification::where('history_id', $history->id)->get();
             foreach($notifications as $notification) {
@@ -32,7 +32,7 @@ class UserHistoryController extends Controller
             }
             $history['selectedCompanies'] = $notifications;
         }
-        $user = Auth::user();
+        $user = $request->user();
         return response()->json([
             'allHistory' => $allHistory,
             'user' => $user

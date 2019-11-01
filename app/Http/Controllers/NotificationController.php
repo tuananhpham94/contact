@@ -19,7 +19,7 @@ class NotificationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, Notification $notification)
+    public function index(Request $request)
     {
         $latestHistory = UserHistory::getLatestHistory($request);
         if(!$latestHistory){
@@ -27,7 +27,7 @@ class NotificationController extends Controller
                 'error' => true,
             ]);
         }
-        $notifications = Notification::where('history_id', $latestHistory->id)->get();
+        $notifications = Notification::with('company')->where('history_id', $latestHistory->id)->get();
         foreach($notifications as $notification) {
             $notification['label'] = $notification->company->legal_name;
             $notification['value'] = $notification->company->id;

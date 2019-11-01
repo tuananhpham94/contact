@@ -12,9 +12,7 @@ export default class History extends Component {
                 <td>{history.email}</td>
                 <td>{history.tel}</td>
                 <td>{history.address}</td>
-                <td>{history.selectedCompanies ? history.selectedCompanies.map((company, key) => {
-                    return company.label
-                }).join(', ') : "None"}  </td>
+                <td>{history.selectedCompanies ? history.selectedCompanies.map((company, key) => company.label).join(', ') : "None"}  </td>
             </tr>
         ));
     };
