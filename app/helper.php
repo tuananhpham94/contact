@@ -8,9 +8,9 @@ function unique_code()
 
 function slackIntegration($data, $error){
     if($error){
-        $url = "https://hooks.slack.com/services/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"; // error hook to urgent_error channel
+        $url = env('SLACK_ERROR');// error hook to urgent_error channel
     } else {
-        $url = 'https://hooks.slack.com/services/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'; // lead hook to website channel
+        $url = env('SLACK_LEAD');// lead hook to website channel
     }
     //create a new cURL resource
     $ch = curl_init($url);
