@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NotificationIsCreated;
+use App\Jobs\SendEmailToCompany;
 use App\Notification;
 use App\User;
 use App\UserHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class UserHistoryController extends Controller
@@ -57,6 +61,8 @@ class UserHistoryController extends Controller
      */
     public function store(Request $request)
     {
+        Log::info("Request fired");
+
 //        return DB::table('user_history')->latest('created_date')->first();
 //        Take newest record with address email and tel
 //    => compared them with newer record from request below, then fire out some zap to banks // probably events / queues combo to send email to banks at this stage
@@ -89,7 +95,9 @@ class UserHistoryController extends Controller
                 'history_id' => $history->id,
                 'company_id' => $company['value']
             ]);
+            SendEmailToCompany::dispatch($notifications)->delay(30);
         }
+        Log::info("Request ended");
         return response()->json([
             'history' => $history,
             'companies' => $request->selectedCompanies
