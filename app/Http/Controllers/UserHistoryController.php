@@ -101,7 +101,7 @@ class UserHistoryController extends Controller
                 SendEmailToCompany::dispatch($notifications)->delay(5);
             }
         }
-
+        // work out a way to catch the failed jobs
 
         AddHistoryToSpreadSheet::dispatch($history)->delay(5);
 
