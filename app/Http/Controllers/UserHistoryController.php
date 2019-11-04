@@ -95,7 +95,7 @@ class UserHistoryController extends Controller
                 'history_id' => $history->id,
                 'company_id' => $company['value']
             ]);
-            SendEmailToCompany::dispatch($notifications)->delay(30);
+            SendEmailToCompany::dispatch($notifications)->delay(5);
         }
         Log::info("Request ended");
         return response()->json([

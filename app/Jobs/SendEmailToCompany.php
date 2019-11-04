@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Company;
 use App\UserHistory;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -34,11 +35,13 @@ class SendEmailToCompany implements ShouldQueue
     public function handle()
     {
         $noti = $this->notification;
-        Mail::raw("Checkout new: " . UserHistory::find($noti->history_id)->user->name, function ($message) use ($noti) {
+        $user = UserHistory::find($noti->history_id)->user;
+        $pdf = PDF::loadView('pdf/pdf', compact('user'));
+        Mail::raw("Checkout new: " . $user->name, function ($message) use ($noti, $pdf) {
 
             $message->from('anhpt@traffic.net.nz', 'Anh');
 
-            $message->to(Company::find($noti->company_id)->email);
+            $message->to(Company::find($noti->company_id)->email)->attachData($pdf->output(), "address.pdf");
 
         });
     }
