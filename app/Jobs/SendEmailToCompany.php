@@ -41,23 +41,25 @@ class SendEmailToCompany implements ShouldQueue
         try {
             Mail::raw("Checkout new: " . $history->user->name, function ($message) use ($noti, $pdf, $company) {
 
-                $message->from('anhpt@traffic.net.nz', 'Anh');
+                $message->from('tuananh191194@gmail.com', 'Anh');
 
                 $message->to($company->email)->attachData($pdf->output(), "address.pdf");
 
             });
             if( count(Mail::failures()) > 0 ) {
+                $error = true;
                 $data = "Hey <!channel>, A job has failed :shit::shit::shit:, please find the detail below and manually send email to those company". "\n" .
                     ">User ID: " . $history->user->unique_id . "\n" . ">Email: " . $history->email . "\n" . ">Address: " . $history->address . "\n" . ">Phone: " . $history->tel
                     . "\n" . "Notification should go to: " . $company->legal_name . " with the email of: " . $company->email . "\n";
-                slackIntegration($data);
+                slackIntegration($data, $error);
             }
         } catch (\Exception $e) {
             // return response showing failed emails
+            $error = true;
             $data = "Hey <!channel>, A job has failed :shit::shit::shit:, please find the detail below and manually send email to those company". "\n" .
                 ">User ID: " . $history->user->unique_id . "\n" . ">Email: " . $history->email . "\n" . ">Address: " . $history->address . "\n" . ">Phone: " . $history->tel
                 . "\n" . "Notification should go to: " . $company->legal_name . " with the email of: " . $company->email . "\n" . "```Error " . $e->getMessage() . "```";
-            slackIntegration($data);
+            slackIntegration($data, true);
         }
     }
 }

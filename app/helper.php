@@ -6,8 +6,12 @@ function unique_code()
     return strtoupper(substr(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36), -6, 5)) . $id;
 }
 
-function slackIntegration($data){
-    $url = 'https://hooks.slack.com/services/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'; //slack hooks
+function slackIntegration($data, $error){
+    if($error){
+        $url = "https://hooks.slack.com/services/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"; // error hook to urgent_error channel
+    } else {
+        $url = 'https://hooks.slack.com/services/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'; // lead hook to website channel
+    }
     //create a new cURL resource
     $ch = curl_init($url);
     $payload = json_encode(array("text" => $data));

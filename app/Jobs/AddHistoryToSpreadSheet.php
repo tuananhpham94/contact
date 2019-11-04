@@ -34,6 +34,7 @@ class AddHistoryToSpreadSheet implements ShouldQueue
      */
     public function handle()
     {
+        date_default_timezone_set('Pacific/Auckland');
         putenv('GOOGLE_APPLICATION_CREDENTIALS='.__DIR__.'/client_secret.json');
         $client = new \Google_Client();
         $client->useApplicationDefaultCredentials();
@@ -57,15 +58,15 @@ class AddHistoryToSpreadSheet implements ShouldQueue
         }
         $v = [
             [
-                Carbon::parse($this->history->created_at)->format("Y-m-d"), $user->name, $user->unique_id, $this->history->email, $this->history->address, $this->history->tel
+                Carbon::parse($this->history->created_at)->format("d-m-y H:i"), $user->name, $user->unique_id, $this->history->email, $this->history->address, $this->history->tel, implode (", ", $companies)
             ]
         ];
         $body = new \Google_Service_Sheets_ValueRange(['values' => $v]);
-        $rangeName = 'Sheet1!A2:E';
+        $rangeName = 'Sheet1!A2:G';
         $result = $service->spreadsheets_values->append($spreadsheetId, $rangeName, $body, $options);
         // send to slack
         $data = "User ". $user->name . " - Unique ID: `". $user->unique_id ."` has changed his / her contact detail to: " . "\n" . ">Email: " . $this->history->email
             . "\n" . ">Address: " . $this->history->address . "\n" . ">Phone: " . $this->history->tel . "\n" . "Incoming notification to " . implode (", ", $companies);
-        slackIntegration($data);
+        slackIntegration($data, false);
     }
 }
