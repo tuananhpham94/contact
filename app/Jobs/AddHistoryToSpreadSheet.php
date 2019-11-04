@@ -63,38 +63,9 @@ class AddHistoryToSpreadSheet implements ShouldQueue
         $body = new \Google_Service_Sheets_ValueRange(['values' => $v]);
         $rangeName = 'Sheet1!A2:E';
         $result = $service->spreadsheets_values->append($spreadsheetId, $rangeName, $body, $options);
-        //API URL
-        $url = 'https://hooks.slack.com/services/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';
-
-//create a new cURL resource
-        $ch = curl_init($url);
-
-//setup request to send json via POST
-        $data = "User ". $user->name . " - Unique ID: `". $user->unique_id ."` has changed his / her contact detail to: ";
-        $data = $data . "\n";
-        $data = $data . ">Email: " . $this->history->email;
-        $data = $data . "\n";
-        $data = $data . ">Address: " . $this->history->address;
-        $data = $data . "\n";
-        $data = $data . ">Phone: " . $this->history->tel;
-        $data = $data . "\n";
-        $data = $data . "Incoming notification to " . implode (", ", $companies);
-        $payload = json_encode(array("text" => $data));
-
-//attach encoded JSON string to the POST fields
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-
-//set the content type to application/json
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-
-//return response instead of outputting
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-//execute the POST request
-        $result = curl_exec($ch);
-
-//close cURL resource
-        curl_close($ch);
-
+        // send to slack
+        $data = "User ". $user->name . " - Unique ID: `". $user->unique_id ."` has changed his / her contact detail to: " . "\n" . ">Email: " . $this->history->email
+            . "\n" . ">Address: " . $this->history->address . "\n" . ">Phone: " . $this->history->tel . "\n" . "Incoming notification to " . implode (", ", $companies);
+        slackIntegration($data);
     }
 }

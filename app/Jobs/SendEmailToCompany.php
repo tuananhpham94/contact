@@ -46,47 +46,18 @@ class SendEmailToCompany implements ShouldQueue
                 $message->to($company->email)->attachData($pdf->output(), "address.pdf");
 
             });
+            if( count(Mail::failures()) > 0 ) {
+                $data = "Hey <!channel>, A job has failed :shit::shit::shit:, please find the detail below and manually send email to those company". "\n" .
+                    ">User ID: " . $history->user->unique_id . "\n" . ">Email: " . $history->email . "\n" . ">Address: " . $history->address . "\n" . ">Phone: " . $history->tel
+                    . "\n" . "Notification should go to: " . $company->legal_name . " with the email of: " . $company->email . "\n";
+                slackIntegration($data);
+            }
         } catch (\Exception $e) {
             // return response showing failed emails
-            //API URL
-            $url = 'https://hooks.slack.com/services/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';
-
-//create a new cURL resource
-            $ch = curl_init($url);
-            $data = "Hey <!channel>, A job has failed :shit::shit::shit:, please find the detail below and manually send email to those company";
-            $data = $data . "\n";
-            $data = $data . ">User ID: " . $history->user->unique_id;
-            $data = $data . "\n";
-            $data = $data . ">Email: " . $history->email;
-            $data = $data . "\n";
-            $data = $data . ">Address: " . $history->address;
-            $data = $data . "\n";
-            $data = $data . ">Phone: " . $history->tel;
-            $data = $data . "\n";
-            $data = $data . "Notification should go to: " . $company->legal_name . " with the email of: " . $company->email;
-            $data = $data . "\n";
-            $data = $data . "```Error " . $e->getMessage() . "```";
-            $payload = json_encode(array("text" => $data));
-
-//attach encoded JSON string to the POST fields
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-
-//set the content type to application/json
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
-
-//return response instead of outputting
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-//execute the POST request
-            $result = curl_exec($ch);
-
-//close cURL resource
-            curl_close($ch);
-
+            $data = "Hey <!channel>, A job has failed :shit::shit::shit:, please find the detail below and manually send email to those company". "\n" .
+                ">User ID: " . $history->user->unique_id . "\n" . ">Email: " . $history->email . "\n" . ">Address: " . $history->address . "\n" . ">Phone: " . $history->tel
+                . "\n" . "Notification should go to: " . $company->legal_name . " with the email of: " . $company->email . "\n" . "```Error " . $e->getMessage() . "```";
+            slackIntegration($data);
         }
-
-
-
-
     }
 }
