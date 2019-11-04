@@ -1,4 +1,5 @@
 <?php
+
 function unique_code()
 {
     $lastRecord = \Illuminate\Support\Facades\DB::table('users')->get()->last();
@@ -8,9 +9,9 @@ function unique_code()
 
 function slackIntegration($data, $error){
     if($error){
-        $url = env('SLACK_ERROR');// error hook to urgent_error channel
+        $url = config('values.slack_error');// error hook to urgent_error channel
     } else {
-        $url = env('SLACK_LEAD');// lead hook to website channel
+        $url = config('values.slack_lead');// lead hook to website channel
     }
     //create a new cURL resource
     $ch = curl_init($url);
