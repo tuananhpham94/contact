@@ -35,9 +35,9 @@ class SendEmailToCompany implements ShouldQueue
     public function handle()
     {
         $noti = $this->notification;
-        $user = UserHistory::find($noti->history_id)->user;
-        $pdf = PDF::loadView('pdf/pdf', compact('user'));
-        Mail::raw("Checkout new: " . $user->name, function ($message) use ($noti, $pdf) {
+        $history = UserHistory::find($noti->history_id);
+        $pdf = PDF::loadView('pdf/pdf', compact('history'));
+        Mail::raw("Checkout new: " . $history->user->name, function ($message) use ($noti, $pdf) {
 
             $message->from('anhpt@traffic.net.nz', 'Anh');
 

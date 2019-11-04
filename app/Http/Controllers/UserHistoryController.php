@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\NotificationIsCreated;
+use App\Jobs\AddHistoryToSpreadSheet;
 use App\Jobs\SendEmailToCompany;
 use App\Notification;
 use App\User;
@@ -90,13 +91,20 @@ class UserHistoryController extends Controller
         $history['selectedCompanies'] = $request->selectedCompanies;
 
         $notifications = [];
-        foreach($request->selectedCompanies as $company) {
-            $notifications = Notification::create([
-                'history_id' => $history->id,
-                'company_id' => $company['value']
-            ]);
-            SendEmailToCompany::dispatch($notifications)->delay(5);
+        // has to implement something in case no company is selected
+        if($request->selectedCompanies) {
+            foreach($request->selectedCompanies as $company) {
+                $notifications = Notification::create([
+                    'history_id' => $history->id,
+                    'company_id' => $company['value']
+                ]);
+                SendEmailToCompany::dispatch($notifications)->delay(5);
+            }
         }
+
+
+        AddHistoryToSpreadSheet::dispatch($history)->delay(5);
+
         Log::info("Request ended");
         return response()->json([
             'history' => $history,
