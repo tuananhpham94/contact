@@ -69,4 +69,25 @@ class AddHistoryToSpreadSheet implements ShouldQueue
             . "\n" . ">Address: " . $this->history->address . "\n" . ">Phone: " . $this->history->tel . "\n" . "Incoming notification to " . implode (", ", $companies);
         slackIntegration($data, false);
     }
+    /**
+     * The job failed to process.
+     *
+     * @param  Exception  $exception
+     * @return void
+     */
+    public function failed(\Exception $e)
+    {
+        $error = true;
+        $user = User::find($this->history->user_id);
+        $notifications = Notification::where('history_id', $this->history->id)->get();
+        $companies = [];
+        foreach($notifications as $notification) {
+            array_push($companies, Company::find($notification->company_id)->legal_name);
+        }
+        $data = "`This job has failed to insert to the spreadsheet, see detail and error below:` \n User ". $user->name . " - Unique ID: `". $user->unique_id ."` has changed his / her contact detail to: " . "\n" . ">Email: " . $this->history->email
+            . "\n" . ">Address: " . $this->history->address . "\n" . ">Phone: " . $this->history->tel . "\n" . "Incoming notification to " . implode (", ", $companies)
+            . "\n" . "```Error: " . $e->getMessage() . '```';
+
+        slackIntegration($data, $error);
+    }
 }

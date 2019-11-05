@@ -62,8 +62,6 @@ class UserHistoryController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info("Request fired");
-
 //        return DB::table('user_history')->latest('created_date')->first();
 //        Take newest record with address email and tel
 //    => compared them with newer record from request below, then fire out some zap to banks // probably events / queues combo to send email to banks at this stage
@@ -105,7 +103,6 @@ class UserHistoryController extends Controller
 
         AddHistoryToSpreadSheet::dispatch($history)->delay(5);
 
-        Log::info("Request ended");
         return response()->json([
             'history' => $history,
             'companies' => $request->selectedCompanies

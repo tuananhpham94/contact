@@ -59,7 +59,21 @@ class SendEmailToCompany implements ShouldQueue
             $data = "Hey <!channel>, A job has failed :shit::shit::shit:, please find the detail below and manually send email to those company". "\n" .
                 ">User ID: " . $history->user->unique_id . "\n" . ">Email: " . $history->email . "\n" . ">Address: " . $history->address . "\n" . ">Phone: " . $history->tel
                 . "\n" . "Notification should go to: " . $company->legal_name . " with the email of: " . $company->email . "\n" . "```Error " . $e->getMessage() . "```";
-            slackIntegration($data, true);
+            slackIntegration($data, $error);
         }
+    }
+
+    public function failed(\Exception $e)
+    {
+        $noti = $this->notification;
+        $history = UserHistory::find($noti->history_id);
+        $company = Company::find($noti->company_id);
+
+        // return response showing failed emails
+        $error = true;
+        $data = "Hey <!channel>, A job has failed :shit::shit::shit:, please find the detail below and manually send email to those company". "\n" .
+            ">User ID: " . $history->user->unique_id . "\n" . ">Email: " . $history->email . "\n" . ">Address: " . $history->address . "\n" . ">Phone: " . $history->tel
+            . "\n" . "Notification should go to: " . $company->legal_name . " with the email of: " . $company->email . "\n" . "```Error " . $e->getMessage() . "```";
+        slackIntegration($data, $error);
     }
 }
