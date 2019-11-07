@@ -34,7 +34,6 @@ class SendEmailToCompany implements ShouldQueue
      */
     public function handle()
     {
-        date_default_timezone_set('Pacific/Auckland');
         $noti = $this->notification;
         $history = UserHistory::find($noti->history_id);
         $company = Company::find($noti->company_id);
