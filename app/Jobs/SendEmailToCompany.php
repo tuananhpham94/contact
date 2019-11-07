@@ -34,16 +34,19 @@ class SendEmailToCompany implements ShouldQueue
      */
     public function handle()
     {
+        date_default_timezone_set('Pacific/Auckland');
         $noti = $this->notification;
         $history = UserHistory::find($noti->history_id);
-        $pdf = PDF::loadView('pdf/pdf', compact('history'));
         $company = Company::find($noti->company_id);
+        $oldInfo = UserHistory::orderBy('created_at', 'desc')->skip(1)->take(1)->get()->first();
+        $pdf = PDF::loadView('pdf/pdf', compact('history', 'company', 'oldInfo'));
+
         try {
-            Mail::raw("Checkout new: " . $history->user->name, function ($message) use ($noti, $pdf, $company) {
+            Mail::send('pdf/mail', array() , function ($message) use ($noti, $pdf, $company) {
 
-                $message->from('tuananh191194@gmail.com', 'Anh');
+                $message->from('tuananh191194@gmail.com', 'ContactApp Team');
 
-                $message->to($company->email)->attachData($pdf->output(), "address.pdf");
+                $message->to($company->email)->subject("A customer has changed their contact detail")->attachData($pdf->output(), "address.pdf");
 
             });
             if( count(Mail::failures()) > 0 ) {
