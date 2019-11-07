@@ -46,9 +46,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if($exception->getMessage()){
+            $data = 'An user face a error, see below ```' . $exception->getCode() . ": " . $exception->getMessage() . "Request: " . $request .'```';
+            slackIntegration($data, true);
+        }
 
-        $data = 'An user face a error, see below ```' . $exception->getCode() . ": " . $exception->getMessage() . "Request: " . $request .'```';
-        slackIntegration($data, true);
         return parent::render($request, $exception);
     }
 }
