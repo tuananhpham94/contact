@@ -17,23 +17,13 @@ export default class App extends Component {
             selectedCompanies: []
         };
     }
-    handleEmailChange(e) {
-        this.setState({email:e.target.value,
-            helpText: ""});
-    }
-    handleAddressChange(e) {
+    handleChange(e) {
         this.setState({
-            address: e.target.value,
+            [e.target.name]:e.target.value,
             helpText: ""
         });
     }
-    handleTelChange(e) {
-        this.setState({
-            tel: e.target.value,
-            helpText: ""
-        });
-    }
-    handleCompanyChange(name, e) {
+    handleCompanyChange(e) {
         this.setState({
             selectedCompanies: e
         });
@@ -151,14 +141,12 @@ export default class App extends Component {
                         <div className="card-body">{this.state.helpText}</div>
                         <Form
                             submit={(event) => this.handleSubmit(event)}
-                            emailChange={(event) => this.handleEmailChange(event)}
+                            onChange={(event) => this.handleChange(event)}
                             email={this.state.email}
-                            telChange={(event) => this.handleTelChange(event)}
                             tel={this.state.tel}
-                            addressChange={(event) => this.handleAddressChange(event)}
                             address={this.state.address}
                             companies={this.state.companies}
-                            companyChange={e => this.handleCompanyChange(name, e)}
+                            companyChange={e => this.handleCompanyChange(e)}
                             selectedCompanies={this.state.selectedCompanies}
                             value={this.state.selectedCompanies}
                         />

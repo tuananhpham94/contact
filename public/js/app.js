@@ -79710,8 +79710,6 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -79719,6 +79717,8 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -79766,32 +79766,15 @@ function (_Component) {
   }
 
   _createClass(App, [{
-    key: "handleEmailChange",
-    value: function handleEmailChange(e) {
-      this.setState({
-        email: e.target.value,
-        helpText: ""
-      });
-    }
-  }, {
-    key: "handleAddressChange",
-    value: function handleAddressChange(e) {
-      this.setState({
-        address: e.target.value,
-        helpText: ""
-      });
-    }
-  }, {
-    key: "handleTelChange",
-    value: function handleTelChange(e) {
-      this.setState({
-        tel: e.target.value,
-        helpText: ""
-      });
+    key: "handleChange",
+    value: function handleChange(e) {
+      var _this$setState;
+
+      this.setState((_this$setState = {}, _defineProperty(_this$setState, e.target.name, e.target.value), _defineProperty(_this$setState, "helpText", ""), _this$setState));
     }
   }, {
     key: "handleCompanyChange",
-    value: function handleCompanyChange(name, e) {
+    value: function handleCompanyChange(e) {
       this.setState({
         selectedCompanies: e
       });
@@ -79946,21 +79929,15 @@ function (_Component) {
         submit: function submit(event) {
           return _this6.handleSubmit(event);
         },
-        emailChange: function emailChange(event) {
-          return _this6.handleEmailChange(event);
+        onChange: function onChange(event) {
+          return _this6.handleChange(event);
         },
         email: this.state.email,
-        telChange: function telChange(event) {
-          return _this6.handleTelChange(event);
-        },
         tel: this.state.tel,
-        addressChange: function addressChange(event) {
-          return _this6.handleAddressChange(event);
-        },
         address: this.state.address,
         companies: this.state.companies,
         companyChange: function companyChange(e) {
-          return _this6.handleCompanyChange(name, e);
+          return _this6.handleCompanyChange(e);
         },
         selectedCompanies: this.state.selectedCompanies,
         value: this.state.selectedCompanies
@@ -80017,7 +79994,7 @@ var form = function form(props) {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
     htmlFor: "email"
   }, "Email address"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
-    onChange: props.emailChange,
+    onChange: props.onChange,
     id: "email",
     type: "email",
     className: "form-control",
@@ -80031,7 +80008,7 @@ var form = function form(props) {
   }, " Phone number"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     id: "tel",
     type: "text",
-    onChange: props.telChange,
+    onChange: props.onChange,
     className: "form-control",
     name: "tel",
     value: props.tel,
@@ -80043,7 +80020,7 @@ var form = function form(props) {
   }, "Address"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
     id: "address",
     type: "text",
-    onChange: props.addressChange,
+    onChange: props.onChange,
     className: "form-control",
     name: "address",
     value: props.address,
