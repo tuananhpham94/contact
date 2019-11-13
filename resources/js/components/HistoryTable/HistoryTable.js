@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import ReactDOM from 'react-dom';
 
-export default class History extends Component {
+export default class History extends PureComponent {
     constructor(props) {
         super(props);
     }

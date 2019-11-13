@@ -16,6 +16,10 @@ export default class App extends Component {
             companies: [],
             selectedCompanies: []
         };
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleCompanyChange = this.handleCompanyChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleChange(e) {
         this.setState({
@@ -80,6 +84,7 @@ export default class App extends Component {
     }
     getHistory() {
         axios.get('/userHistory').then(response => {
+
             const allHistory = [...response.data.allHistory];
             const user = {...response.data.user};
             // console.log({...response.data.user});
@@ -140,13 +145,13 @@ export default class App extends Component {
 
                         <div className="card-body">{this.state.helpText}</div>
                         <Form
-                            submit={(event) => this.handleSubmit(event)}
-                            onChange={(event) => this.handleChange(event)}
+                            submit={this.handleSubmit}
+                            onChange={this.handleChange}
                             email={this.state.email}
                             tel={this.state.tel}
                             address={this.state.address}
                             companies={this.state.companies}
-                            companyChange={e => this.handleCompanyChange(e)}
+                            companyChange={this.handleCompanyChange}
                             selectedCompanies={this.state.selectedCompanies}
                             value={this.state.selectedCompanies}
                         />

@@ -79728,9 +79728,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -79762,6 +79762,9 @@ function (_Component) {
       companies: [],
       selectedCompanies: []
     };
+    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.handleCompanyChange = _this.handleCompanyChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -79907,8 +79910,6 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this6 = this;
-
       var table;
       this.state.history.length > 0 ? table = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_HistoryTable_HistoryTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
         history: this.state.history
@@ -79926,19 +79927,13 @@ function (_Component) {
       }, "Unique ID: ", this.state.id), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "card-body"
       }, this.state.helpText), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Form_Form__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        submit: function submit(event) {
-          return _this6.handleSubmit(event);
-        },
-        onChange: function onChange(event) {
-          return _this6.handleChange(event);
-        },
+        submit: this.handleSubmit,
+        onChange: this.handleChange,
         email: this.state.email,
         tel: this.state.tel,
         address: this.state.address,
         companies: this.state.companies,
-        companyChange: function companyChange(e) {
-          return _this6.handleCompanyChange(e);
-        },
+        companyChange: this.handleCompanyChange,
         selectedCompanies: this.state.selectedCompanies,
         value: this.state.selectedCompanies
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -80085,8 +80080,8 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 var History =
 /*#__PURE__*/
-function (_Component) {
-  _inherits(History, _Component);
+function (_PureComponent) {
+  _inherits(History, _PureComponent);
 
   function History(props) {
     _classCallCheck(this, History);
@@ -80115,7 +80110,7 @@ function (_Component) {
   }]);
 
   return History;
-}(react__WEBPACK_IMPORTED_MODULE_0__["Component"]);
+}(react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"]);
 
 
 
